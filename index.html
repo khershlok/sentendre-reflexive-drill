@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>S'entendre — Reflexive Verb Drill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-line: #E4DFD1;
+    --ink: #1F2A44;
+    --ink-soft: #5B6478;
+    --gold: #B8912E;
+    --gold-soft: #EADFC0;
+    --good: #2F6B45;
+    --good-bg: #E3EEE3;
+    --bad: #A6402A;
+    --bad-bg: #F3E2DC;
+    --card: #FFFDF8;
+    --card-border: #DED6C2;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --paper: #191712;
+      --paper-line: #262218;
+      --ink: #EFE9DA;
+      --ink-soft: #B3A98F;
+      --gold: #D6AE4C;
+      --gold-soft: #3A3017;
+      --good: #7FC492;
+      --good-bg: #223223;
+      --bad: #E08A6F;
+      --bad-bg: #3A2420;
+      --card: #221E16;
+      --card-border: #38321F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #191712;
+    --paper-line: #262218;
+    --ink: #EFE9DA;
+    --ink-soft: #B3A98F;
+    --gold: #D6AE4C;
+    --gold-soft: #3A3017;
+    --good: #7FC492;
+    --good-bg: #223223;
+    --bad: #E08A6F;
+    --bad-bg: #3A2420;
+    --card: #221E16;
+    --card-border: #38321F;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    background: var(--paper);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 35px,
+      var(--paper-line) 35px,
+      var(--paper-line) 36px
+    );
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-top: calc(28px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+  }
+
+  .stage {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .eyebrow-line {
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 30px;
+    margin: 4px 0 2px;
+  }
+
+  /* Streak track */
+  .track {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 20px 0 26px;
+  }
+  .pip {
+    width: 26px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--card-border);
+    transition: background 0.25s ease, transform 0.2s ease;
+  }
+  .pip.filled {
+    background: var(--gold);
+  }
+  .pip.pop {
+    transform: scaleY(1.6);
+  }
+
+  .streak-label {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .streak-label b { color: var(--ink); font-weight: 600; }
+  .best-label {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 34px 26px 26px;
+    box-shadow: 0 1px 0 var(--card-border);
+  }
+
+  .prompt-label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .prompt {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.25;
+    margin-bottom: 26px;
+    min-height: 66px;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 10px;
+  }
+  .answer-input {
+    flex: 1;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .answer-input:focus {
+    border-color: var(--gold);
+  }
+  .answer-input.correct {
+    background: var(--good-bg);
+    border-color: var(--good);
+    color: var(--good);
+    font-weight: 600;
+  }
+  .answer-input.incorrect {
+    background: var(--bad-bg);
+    border-color: var(--bad);
+    color: var(--bad);
+  }
+  .submit-btn {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper);
+    background: var(--ink);
+    border: none;
+    border-radius: 3px;
+    padding: 0 20px;
+    cursor: pointer;
+  }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .hint-line {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  .feedback {
+    min-height: 22px;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .next-btn {
+    display: none;
+    margin-top: 6px;
+    width: 100%;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper);
+    background: var(--ink);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .next-btn.show { display: block; }
+
+  .win-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .win-screen.show { display: block; }
+  .win-screen .stage-hide { display: none; }
+  .win-title {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+  .win-sub {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 26px;
+  }
+  .restart-btn {
+    padding: 13px 26px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper);
+    background: var(--good);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <header>
+    <div class="eyebrow-line">Reflexive verb drill</div>
+    <h1>Onze de suite</h1>
+  </header>
+
+  <div class="track" id="track"></div>
+  <div class="streak-label" id="streakLabel"><b>0</b> correct in a row — need 11</div>
+  <div class="best-label" id="bestLabel">Best streak this session: 0</div>
+
+  <div class="card" id="card">
+    <div class="prompt-label" id="promptLabel">How do you say it in French?</div>
+    <div class="prompt" id="prompt"></div>
+    <div class="answer-row">
+      <input class="answer-input" id="answerInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the French reflexive verb…">
+      <button class="submit-btn" id="submitBtn">Check</button>
+    </div>
+    <div class="hint-line">Accents optional — s'interesser and s'intéresser both work. Words you've missed show up earlier each round.</div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="nextBtn">Next word</button>
+  </div>
+</div>
+
+<div class="win-screen" id="winScreen">
+  <div class="win-title">Onze sur onze.</div>
+  <div class="win-sub">11 correct in a row, order scrambled the whole way. That's mastery, not luck.</div>
+  <button class="restart-btn" id="restartBtn">Go again</button>
+</div>
+
+<script>
+  const VERBS = [
+    { fr: "S'entendre bien (avec)", en: "To get on well (with)", accept: ["s'entendre bien avec", "s'entendre bien"] },
+    { fr: "Se disputer", en: "To argue", accept: ["se disputer"] },
+    { fr: "S'inquiéter de", en: "To worry about", accept: ["s'inquieter de", "s'inquieter"] },
+    { fr: "Se débrouiller", en: "To manage / get by", accept: ["se debrouiller"] },
+    { fr: "S'énerver", en: "To get annoyed", accept: ["s'enerver"] },
+    { fr: "S'amuser", en: "To have fun", accept: ["s'amuser"] },
+    { fr: "Se voir", en: "To see each other", accept: ["se voir"] },
+    { fr: "S'adapter à / S'habituer à", en: "To get used to", accept: ["s'adapter a", "s'adapter", "s'habituer a", "s'habituer"] },
+    { fr: "S'approcher de (quelqu'un)", en: "To get closer to (someone)", accept: ["s'approcher de quelqu'un", "s'approcher de"] },
+    { fr: "S'intéresser à", en: "To be interested in", accept: ["s'interesser a", "s'interesser"] },
+    { fr: "S'occuper de", en: "To take care of", accept: ["s'occuper de"] }
+  ];
+  const NEEDED = 11;
+
+  function normalize(str) {
+    return str
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[’‘`]/g, "'")
+      .replace(/[().,]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  let streak = 0;
+  let best = 0;
+  let current = null;
+  let queue = [];
+  let locked = false;
+  let missCounts = {};
+
+  const trackEl = document.getElementById('track');
+  const streakLabel = document.getElementById('streakLabel');
+  const bestLabel = document.getElementById('bestLabel');
+  const promptEl = document.getElementById('prompt');
+  const answerInput = document.getElementById('answerInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const feedbackEl = document.getElementById('feedback');
+  const nextBtn = document.getElementById('nextBtn');
+  const stage = document.getElementById('stage');
+  const winScreen = document.getElementById('winScreen');
+  const restartBtn = document.getElementById('restartBtn');
+
+  function buildTrack() {
+    trackEl.innerHTML = '';
+    for (let i = 0; i < NEEDED; i++) {
+      const p = document.createElement('div');
+      p.className = 'pip';
+      p.id = 'pip-' + i;
+      trackEl.appendChild(p);
+    }
+  }
+
+  function updateTrack(justFilledIndex) {
+    for (let i = 0; i < NEEDED; i++) {
+      const p = document.getElementById('pip-' + i);
+      p.classList.toggle('filled', i < streak);
+      p.classList.remove('pop');
+    }
+    if (justFilledIndex !== undefined && justFilledIndex >= 0) {
+      const p = document.getElementById('pip-' + justFilledIndex);
+      requestAnimationFrame(() => p.classList.add('pop'));
+    }
+  }
+
+  function updateLabels() {
+    streakLabel.innerHTML = '<b>' + streak + '</b> correct in a row — need ' + NEEDED;
+    bestLabel.textContent = 'Best streak this session: ' + best;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Weighted order: words missed more often are more likely to land
+  // earlier in the lap, without ever skipping or repeating a word.
+  function weightedOrder(items) {
+    const keyed = items.map(v => {
+      const weight = 1 + (missCounts[v.fr] || 0) * 2;
+      const key = -Math.log(Math.random()) / weight; // Efraimidis–Spirakis
+      return { v, key };
+    });
+    keyed.sort((a, b) => a.key - b.key);
+    return keyed.map(k => k.v);
+  }
+
+  function pickNext() {
+    if (queue.length === 0) {
+      queue = weightedOrder(VERBS).reverse();
+    }
+    const target = queue.pop();
+    current = { target };
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    locked = false;
+    promptEl.textContent = current.target.en;
+    feedbackEl.textContent = '';
+    nextBtn.classList.remove('show');
+    answerInput.value = '';
+    answerInput.classList.remove('correct', 'incorrect');
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    answerInput.focus();
+  }
+
+  function handleAnswer() {
+    if (locked) return;
+    const raw = answerInput.value.trim();
+    if (!raw) return;
+    locked = true;
+
+    const guess = normalize(raw);
+    const accepted = current.target.accept.map(normalize);
+    const isCorrect = accepted.includes(guess);
+
+    answerInput.disabled = true;
+    submitBtn.disabled = true;
+
+    if (isCorrect) {
+      answerInput.classList.add('correct');
+      const filledIndex = streak;
+      streak += 1;
+      if (streak > best) best = streak;
+      updateLabels();
+      updateTrack(filledIndex);
+      feedbackEl.innerHTML = '<strong>' + current.target.fr + '</strong> — correct.';
+      feedbackEl.style.color = 'var(--good)';
+
+      if (streak >= NEEDED) {
+        setTimeout(showWin, 500);
+        return;
+      }
+    } else {
+      answerInput.classList.add('incorrect');
+      streak = 0;
+      queue = [];
+      missCounts[current.target.fr] = (missCounts[current.target.fr] || 0) + 1;
+      updateLabels();
+      updateTrack();
+      feedbackEl.innerHTML = 'You wrote "' + raw + '" — correct answer: <strong>' + current.target.fr + '</strong>. Streak reset — starting over.';
+      feedbackEl.style.color = 'var(--bad)';
+    }
+
+    nextBtn.classList.add('show');
+  }
+
+  function showWin() {
+    stage.style.display = 'none';
+    winScreen.classList.add('show');
+  }
+
+  function restart() {
+    streak = 0;
+    queue = [];
+    updateLabels();
+    updateTrack();
+    winScreen.classList.remove('show');
+    stage.style.display = 'block';
+    pickNext();
+  }
+
+  submitBtn.addEventListener('click', handleAnswer);
+  answerInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (!locked) {
+        handleAnswer();
+      } else if (nextBtn.classList.contains('show')) {
+        pickNext();
+      }
+    }
+  });
+  nextBtn.addEventListener('click', pickNext);
+  restartBtn.addEventListener('click', restart);
+
+  buildTrack();
+  updateLabels();
+  pickNext();
+</script>
+</body>
+</html>
